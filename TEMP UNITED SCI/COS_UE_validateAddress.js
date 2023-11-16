@@ -946,15 +946,21 @@ function(https, record, search) {
             if(respBody.result.uspsData.standardizedAddress.firstAddressLine.toUpperCase() != (addr.addressBreakdown.billaddress1 || addr.addressBreakdown.shipaddress1).toUpperCase())
             // if(respBody.result.uspsData.standardizedAddress.firstAddressLine != addr.addressBreakdown.billaddress1)
             {
+				//COS : ROD 11152023
+				//Prabodh requested that 
                 functionResult.hasIssues = true;
-                //11142023
-                //still flag it for review because the script made a drastic change
-                //but correct address1 from USPS info
-                newAddr1 = respBody.result.uspsData.standardizedAddress.firstAddressLine;
             }
+			
+			//COS ROD : 11142023
+			//still flag it for review because the script made a drastic change
+			//but correct address1 from USPS info
+			//COS : ROD 11152023 because Prabodh is impressed with USPS response, then lets just always follow its address1 if it have a value
+			newAddr1 = respBody.result.uspsData.standardizedAddress.firstAddressLine;
         }
         else{
-            functionResult.hasIssues = true;
+			//if USPD claims there there's no uspsData, standardizedAddress, or firstAddressLine
+			//then it's an issue
+			functionResult.hasIssues = true;
         }
 
         log.debug("validateAddr origAddrComponents with new", origAddrComponents);
@@ -978,6 +984,7 @@ function(https, record, search) {
         //addr1
         // newAddress.push({fieldId : "addr1", value:(((origAddrComponents.point_of_interest.newValue || "") + ", ") + ((origAddrComponents.street_number.newValue || "") + " ") + origAddrComponents.route.newValue + ", " + (origAddrComponents.subpremise.newValue || ""))});
 
+		//comment added 11152023 - if newAddr1 still empty, then build it from address components
       if(!newAddr1)
       {
         if(newAddr1)
