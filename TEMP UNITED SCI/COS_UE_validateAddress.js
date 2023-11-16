@@ -121,7 +121,12 @@ function(https, record, search) {
                             
                             ${JSON.stringify(shipAddr_result.newAddress, null, 1)}
 
-                            ` + "is deemed to be inaccurate" + "\n\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                            ` + "is deemed to be inaccurate" + "\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                        })
+						
+						targetRec.setValue({
+                            fieldId : "custbody_cos_shipaddr_msgtrim",
+                            value : trimmedMsg(shipAddr_result.respBody_result, shipAddr_result.uspsData)
                         })
 
                         targetRec.setValue({
@@ -144,7 +149,12 @@ function(https, record, search) {
                             
                             ${JSON.stringify(shipAddr_result.newAddress, null, 1)}
 
-                            ` + "is deemed to be reliable enough" + "\n\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                            ` + "is deemed to be reliable enough" + "\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                        })
+						
+						targetRec.setValue({
+                            fieldId : "custbody_cos_shipaddr_msgtrim",
+                            value : trimmedMsg(shipAddr_result.respBody_result, shipAddr_result.uspsData)
                         })
 
                         targetRec.setValue({
@@ -168,7 +178,12 @@ function(https, record, search) {
                             
                             ${JSON.stringify(billAddr_result.newAddress, null, 1)}
 
-                            ` + "is deemed to be inaccurate" + "\n\n\n" + JSON.stringify(billAddr_result.respBody_result, null, 1) + "\n\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                            ` + "is deemed to be inaccurate" + "\n\n" + JSON.stringify(billAddr_result.respBody_result, null, 1) + "\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                        })
+						
+						targetRec.setValue({
+                            fieldId : "custbody_cos_shipaddr_msgtrim",
+                            value : trimmedMsg(shipAddr_result.respBody_result, shipAddr_result.uspsData)
                         })
 
                         targetRec.setValue({
@@ -191,7 +206,12 @@ function(https, record, search) {
                             
                             ${JSON.stringify(billAddr_result.newAddress, null, 1)}
 
-                            ` + "is deemed to be reliable enough" + "\n\n\n" + JSON.stringify(billAddr_result.respBody_result, null, 1) + "\n\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                            ` + "is deemed to be reliable enough" + "\n\n" + JSON.stringify(billAddr_result.respBody_result, null, 1) + "\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                        })
+						
+						targetRec.setValue({
+                            fieldId : "custbody_cos_shipaddr_msgtrim",
+                            value : trimmedMsg(shipAddr_result.respBody_result, shipAddr_result.uspsData)
                         })
 
                         targetRec.setValue({
@@ -215,7 +235,12 @@ function(https, record, search) {
                             
                             ${JSON.stringify(shipAddr_result.newAddress, null, 1)}
 
-                            ` + "is deemed to be inaccurate" + "\n\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                            ` + "is deemed to be inaccurate" + "\n\n" + JSON.stringify(shipAddr_result.respBody_result, null, 1) + "\n\n SUGGESTED USPS STANDARDIZED FORMAT: \n" + JSON.stringify(shipAddr_result.uspsData, null, 1)
+                        })
+						
+						targetRec.setValue({
+                            fieldId : "custbody_cos_shipaddr_msgtrim",
+                            value : trimmedMsg(shipAddr_result.respBody_result, shipAddr_result.uspsData)
                         })
 
                         targetRec.setValue({
@@ -247,6 +272,22 @@ function(https, record, search) {
     		log.error("ERROR in function afterSubmit", {stack : e.stack, message : e.message});
     	}
     }
+	
+	function trimmedMsg(newAddress, uspsData)
+	{
+		var funcRes = "";
+		var msgLines = [];
+		for(var a = 0 ; a < newAddress.addressComponents.length ; a++)
+		{
+			var addrComp = newAddress.addressComponents[a];
+			msgLines.push(addrComp.componentType + " : " + addrComp.componentName.text + " : " + addrComp.confirmationLevel);
+		}
+		funcRes = msgLines.join("\n");
+		
+		funcRes += "\n\nGOOGLE USPS INFO:\n" + JSON.stringify(uspsData, null, 2);
+		
+		return funcRes;
+	}
 
     function updateOrderAddress_viaSubrecord(addrtype, targetRec, addr_result)
     {
@@ -948,7 +989,7 @@ function(https, record, search) {
             {
 				//COS : ROD 11152023
 				//Prabodh requested that 
-                functionResult.hasIssues = true;
+                //functionResult.hasIssues = true;
             }
 			
 			//COS ROD : 11142023
